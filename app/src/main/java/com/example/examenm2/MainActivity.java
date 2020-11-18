@@ -1,18 +1,16 @@
 package com.example.examenm2;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+       /* Map<String, Object> user = new HashMap<>();
+        user.put("first", "MAXIMO");
+        user.put("last", "MARCELI");
+        user.put("born", 1995);
 
 // Add a new document with a generated ID
         db.collection("users")
@@ -45,6 +43,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.w(TAG, "Error adding document", e);
+                    }
+                });*/
+
+
+        db.collection("users")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                            }
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
                     }
                 });
 
